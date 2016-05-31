@@ -112,7 +112,7 @@ public class GUI implements WindowListener {
 			if (event.getSource() == btnBookBand) {
 				showOutputMessage(controller.getBandPlayInfo().toString());
 			} else if (event.getSource() == btnSetContact) {
-				showOutputMessage(controller.getBandInfo(comboBand.getSelectedItem().toString()).toString());
+				showOutputMessage(controller.getBandInfo().toString());
 			}
 		}
 	}

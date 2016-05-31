@@ -72,15 +72,6 @@ public class Controller {
 		}
 	}
 	
-	public ArrayList<String> getBandInfo(String band){
-		try{
-			return queryHandler.getBandInfo(band);
-		} catch (SQLException e){
-			gui.showErrorMessage(Constants.DATABASE_ERROR);
-			return null;
-		}
-	}
-	
 	public boolean bookBand(String name, int year, String origin, String genre) {
 		try {
 			queryHandler.addBand(name, year, origin, genre);
