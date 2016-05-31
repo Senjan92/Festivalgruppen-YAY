@@ -17,7 +17,7 @@ public class QueryHandler {
 		sqlResult = statement.executeQuery();	
 		ArrayList<String> resultList = new ArrayList<>();
 		while (sqlResult.next())
-		resultList.add(sqlResult.getString(1)+" "+sqlResult.getString(2)+sqlResult.getString(3)+sqlResult.getString(4)+"\n");
+		resultList.add(sqlResult.getString(1)+" "+sqlResult.getString(2)+sqlResult.getString(3)+sqlResult.getString(4));
 		return resultList;
 
 }

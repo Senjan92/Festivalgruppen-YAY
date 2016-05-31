@@ -1,4 +1,4 @@
-package main.copy;
+package main;
 
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -10,10 +10,6 @@ import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-
-import main.copy.Constants;
-import main.copy.Constants;
-
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -53,34 +49,59 @@ public class GUI implements WindowListener {
 
 	private JTabbedPane initContent() {
 		JTabbedPane tabs = new JTabbedPane();
+		JPanel bookScene = new JPanel();
 		tabs.addTab("Boka Band", initBookBand());
 		tabs.addTab("Delge Kontaktpersoner", initAssignContacts());
+		tabs.addTab("Boka Spelningar", bookScene);
 		return tabs;
 	}
 
 	private JPanel initBookBand() {
 		JPanel panelBands = new JPanel();
 		panelBands.setLayout(new BoxLayout(panelBands, BoxLayout.Y_AXIS));
-
-		btnBookBand = new JButton("Visa Spelningar");
+		txtAreaBandName = new JTextField();
+		txtAreaBandGenre = new JTextField();
+		txtAreaBandOrigin = new JTextField();
+		txtAreaBandStartYear = new JTextField();
+		btnBookBand = new JButton("Boka Band");
 		btnBookBand.addActionListener(buttonListener);
 		btnBookBand.setMinimumSize(new Dimension(370, 25));
 		btnBookBand.setMaximumSize(new Dimension(370, 25));
+		txtAreaBandName.setMinimumSize(new Dimension(370, 20));
+		txtAreaBandName.setMaximumSize(new Dimension(370, 20));
+		txtAreaBandStartYear.setMinimumSize(new Dimension(370, 20));
+		txtAreaBandStartYear.setMaximumSize(new Dimension(370, 20));
+		txtAreaBandOrigin.setMinimumSize(new Dimension(370, 20));
+		txtAreaBandOrigin.setMaximumSize(new Dimension(370, 20));
+		txtAreaBandGenre.setMinimumSize(new Dimension(370, 20));
+		txtAreaBandGenre.setMaximumSize(new Dimension(370, 20));
+		panelBands.add(new JLabel("Bandnamn"));
+		panelBands.add(txtAreaBandName);
+		panelBands.add(new JLabel("Startår"));
+		panelBands.add(txtAreaBandStartYear);
+		panelBands.add(new JLabel("Ursprung"));
+		panelBands.add(txtAreaBandOrigin);
+		panelBands.add(new JLabel("Genre"));
+		panelBands.add(txtAreaBandGenre);
 		panelBands.add(btnBookBand);
-
 		return panelBands;
 	}
 
 	private JPanel initAssignContacts() {
 		JPanel panelContacts = new JPanel();
-		btnSetContact = new JButton("Visa Info");
+		btnSetContact = new JButton("Delge kontaktperson");
+		comboPerson = new JComboBox(controller.getPersons().toArray());
 		comboBand = new JComboBox(controller.getBands().toArray());
 		panelContacts.setLayout(new BoxLayout(panelContacts, BoxLayout.Y_AXIS));
 		btnSetContact.addActionListener(buttonListener);
 		btnSetContact.setMinimumSize(new Dimension(370, 20));
 		btnSetContact.setMaximumSize(new Dimension(370, 20));
+		comboPerson.setMinimumSize(new Dimension(370, 20));
+		comboPerson.setMaximumSize(new Dimension(370, 20));
 		comboBand.setMinimumSize(new Dimension(370, 20));
 		comboBand.setMaximumSize(new Dimension(370, 20));
+		panelContacts.add(new JLabel("Person"));
+		panelContacts.add(comboPerson);
 		panelContacts.add(new JLabel("Band"));
 		panelContacts.add(comboBand);
 		panelContacts.add(btnSetContact);
@@ -95,6 +116,40 @@ public class GUI implements WindowListener {
 		JOptionPane.showMessageDialog(frame, message + "\n\n" + exception);
 	}
 
+	private void bookBand() {
+		String name = txtAreaBandName.getText();
+		String startYear = txtAreaBandStartYear.getText();
+		String origin = txtAreaBandOrigin.getText();
+		String genre = txtAreaBandGenre.getText();
+
+		if (name.isEmpty() || startYear.isEmpty() || origin.isEmpty() || genre.isEmpty()) {
+			showErrorMessage(Constants.EMPTY_FIELDS);
+			return;
+		}
+		try {
+			int year = Integer.parseInt(startYear);
+			if (controller.bookBand(name, year, origin, genre)) {
+				JOptionPane.showMessageDialog(frame, Constants.BAND_BOOKED);
+				resetBandFields();
+			}
+		} catch (NumberFormatException e) {
+			showErrorMessage(Constants.NOT_A_VALID_YEAR);
+		}
+	}
+
+	private void setContact() {
+		String[] personSplitter = comboPerson.getSelectedItem().toString().split(" - ");
+		String person = personSplitter[0];
+		String band = comboBand.getSelectedItem().toString();
+		if (controller.bandHasContact(band))
+			showErrorMessage(Constants.BAND_HAS_CONTACT);
+		else if (controller.setContact(band, person)) {
+			JOptionPane.showMessageDialog(frame, Constants.CONTACT_SET);
+			comboPerson.setModel(new DefaultComboBoxModel(controller.getPersons().toArray()));
+			comboBand.setModel(new DefaultComboBoxModel(controller.getBands().toArray()));
+		}
+	}
+
 	private void resetBandFields() {
 		txtAreaBandName.setText("");
 		txtAreaBandStartYear.setText("");
@@ -102,53 +157,36 @@ public class GUI implements WindowListener {
 		txtAreaBandGenre.setText("");
 	}
 
-	public void showOutputMessage(String message) {
-		JOptionPane.showMessageDialog(frame, message);
-	}
-
 	private class Listener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
+		@Override public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnBookBand) {
-				showOutputMessage(controller.getBandPlayInfo().toString());
+				bookBand();
 			} else if (event.getSource() == btnSetContact) {
 				setContact();
 			}
 		}
 	}
 
-	@Override
-	public void windowActivated(WindowEvent e) {
+	@Override public void windowActivated(WindowEvent e) {
 	}
 
-	public void setContact() {
-		// TODO Auto-generated method stub
-
+	@Override public void windowClosed(WindowEvent e) {
 	}
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
+	@Override public void windowClosing(WindowEvent e) {
 		controller.exit();
 		System.exit(1);
 	}
 
-	@Override
-	public void windowDeactivated(WindowEvent e) {
+	@Override public void windowDeactivated(WindowEvent e) {
 	}
 
-	@Override
-	public void windowDeiconified(WindowEvent e) {
+	@Override public void windowDeiconified(WindowEvent e) {
 	}
 
-	@Override
-	public void windowIconified(WindowEvent e) {
+	@Override public void windowIconified(WindowEvent e) {
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
+	@Override public void windowOpened(WindowEvent e) {
 	}
 }

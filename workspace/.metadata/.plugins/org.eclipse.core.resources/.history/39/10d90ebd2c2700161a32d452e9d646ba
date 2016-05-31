@@ -13,11 +13,11 @@ public class QueryHandler {
 	}
 	
 	public ArrayList<String> getBandPlayInfo () throws SQLException {
-		statement = connection.prepareStatement ("SELECT scen, band, datum, tid FROM Festivalschema;");
+		statement = connection.prepareStatement ("SELECT Namn, scen, tid, datum FROM Festivalschema;");
 		sqlResult = statement.executeQuery();	
 		ArrayList<String> resultList = new ArrayList<>();
 		while (sqlResult.next())
-		resultList.add(sqlResult.getString(1)+" "+sqlResult.getString(2)+sqlResult.getString(3)+sqlResult.getString(4)+"\n");
+		resultList.add(sqlResult.getString(1));
 		return resultList;
 
 }

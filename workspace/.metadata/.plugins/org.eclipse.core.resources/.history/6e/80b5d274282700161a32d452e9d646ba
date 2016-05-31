@@ -1,4 +1,4 @@
-package main.copy;
+package main;
 
 import java.util.*;
 import java.sql.*;
@@ -11,17 +11,6 @@ public class QueryHandler {
 	public QueryHandler(Connection connection) {
 		this.connection = connection;
 	}
-	
-	public ArrayList<String> getBandPlayInfo () throws SQLException {
-		statement = connection.prepareStatement ("SELECT scen, band, datum, tid FROM Festivalschema;");
-		sqlResult = statement.executeQuery();	
-		ArrayList<String> resultList = new ArrayList<>();
-		while (sqlResult.next())
-		resultList.add(sqlResult.getString(1)+" "+sqlResult.getString(2)+sqlResult.getString(3)+sqlResult.getString(4)+"\n");
-		return resultList;
-
-}
-	
 
 	public void addBand(String name, int year, String origin, String genre) throws SQLException {
 		statement = connection.prepareStatement("INSERT INTO Band VALUES ('" + name + "'," + year + ",'" + origin + "','" + genre + "');");

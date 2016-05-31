@@ -61,13 +61,13 @@ public class GUI implements WindowListener {
 	private JPanel initBookBand() {
 		JPanel panelBands = new JPanel();
 		panelBands.setLayout(new BoxLayout(panelBands, BoxLayout.Y_AXIS));
-
+		
 		btnBookBand = new JButton("Visa Spelningar");
 		btnBookBand.addActionListener(buttonListener);
 		btnBookBand.setMinimumSize(new Dimension(370, 25));
 		btnBookBand.setMaximumSize(new Dimension(370, 25));
 		panelBands.add(btnBookBand);
-
+		
 		return panelBands;
 	}
 
@@ -95,60 +95,49 @@ public class GUI implements WindowListener {
 		JOptionPane.showMessageDialog(frame, message + "\n\n" + exception);
 	}
 
-	private void resetBandFields() {
+		private void resetBandFields() {
 		txtAreaBandName.setText("");
 		txtAreaBandStartYear.setText("");
 		txtAreaBandOrigin.setText("");
 		txtAreaBandGenre.setText("");
 	}
-
-	public void showOutputMessage(String message) {
-		JOptionPane.showMessageDialog(frame, message);
-	}
+		
 
 	private class Listener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
+		@Override public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnBookBand) {
-				showOutputMessage(controller.getBandPlayInfo().toString());
+				controller.getBandPlayInfo();
 			} else if (event.getSource() == btnSetContact) {
 				setContact();
 			}
 		}
 	}
 
-	@Override
-	public void windowActivated(WindowEvent e) {
+	@Override public void windowActivated(WindowEvent e) {
 	}
 
 	public void setContact() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
-	@Override
-	public void windowClosed(WindowEvent e) {
+	@Override public void windowClosed(WindowEvent e) {
 	}
 
-	@Override
-	public void windowClosing(WindowEvent e) {
+	@Override public void windowClosing(WindowEvent e) {
 		controller.exit();
 		System.exit(1);
 	}
 
-	@Override
-	public void windowDeactivated(WindowEvent e) {
+	@Override public void windowDeactivated(WindowEvent e) {
 	}
 
-	@Override
-	public void windowDeiconified(WindowEvent e) {
+	@Override public void windowDeiconified(WindowEvent e) {
 	}
 
-	@Override
-	public void windowIconified(WindowEvent e) {
+	@Override public void windowIconified(WindowEvent e) {
 	}
 
-	@Override
-	public void windowOpened(WindowEvent e) {
+	@Override public void windowOpened(WindowEvent e) {
 	}
 }
