@@ -27,21 +27,12 @@ public class Controller {
 		}
 	}
 
-	public ArrayList<String> getBands() {
+	public ArrayList<String> getBandsWithoutContacts() {
 		try {
-			return queryHandler.getBands();
+			return queryHandler.getBandsWithoutContacts();
 		} catch (SQLException e) {
 			gui.showErrorMessage(Constants.DATABASE_ERROR);
 			return null;
-		}
-	}
-
-	public boolean bandHasContact(String band) {
-		try {
-			return queryHandler.bandHasContact(band);
-		} catch (SQLException e) {
-			gui.showErrorMessage(Constants.DATABASE_ERROR);
-			return false;
 		}
 	}
 
@@ -54,14 +45,53 @@ public class Controller {
 		}
 	}
 
+	public boolean timeSlotTaken(String date, String time) {
+		try {
+			return queryHandler.timeSlotTaken(date, time);
+		} catch (SQLException e) {
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+		}
+		return false;
+	}
+
+	public ArrayList<String> getScenes() {
+		try {
+			return queryHandler.getScenes();
+		} catch (SQLException e) {
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+			return null;
+		}
+	}
+
+	public ArrayList<String> getBands() {
+		try {
+			return queryHandler.getBands();
+		} catch (SQLException e) {
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+		}
+		return null;
+	}
+
+	public boolean bookPlay(String scen, String band, String datum, String tid) {
+		try {
+			queryHandler.bookPlay(scen, band, datum, tid);
+			return true;
+		} catch (SQLException e) {
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+		}
+		return false;
+	}
+
 	public boolean setContact(String band, String person) {
 		try {
 			queryHandler.setContact(band, person);
 			return true;
 		} catch (SQLException e) {
-			gui.showErrorMessage(Constants.DATABASE_ERROR,e.getMessage());
-			return false;
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+		} catch (Exception e) {
+			gui.showErrorMessage(Constants.TOO_MANY_FOR_CONTACT);
 		}
+		return false;
 	}
 
 	public boolean bookBand(String name, int year, String origin, String genre) {

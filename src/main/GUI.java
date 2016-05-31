@@ -1,19 +1,20 @@
 package main;
 
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
+import java.util.ResourceBundle.Control;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,10 +27,17 @@ public class GUI implements WindowListener {
 	private JTextField txtAreaBandGenre;
 	private JTextField txtAreaBandOrigin;
 	private JButton btnBookBand;
+	private JButton btnSetContact;
+	private JButton btnBookPlay;
 	private JComboBox comboPerson;
 	private JComboBox comboBand;
-	private JButton btnSetContact;
+	private JComboBox comboBandPlay;
+	private JComboBox comboScenePlay;
+	private JComboBox comboDatePlay;
+	private JComboBox comboTimePlay;
 	private Listener buttonListener;
+	private String[] timeArray;
+	private String[] dateArray;
 
 	public GUI(Controller controller) {
 		this.controller = controller;
@@ -37,9 +45,13 @@ public class GUI implements WindowListener {
 	}
 
 	private void init() {
+		timeArray = new String[] { "00.00-01.00", "01.00-02.00", "02.00-03.00", "03.00-04.00", "04.00-05.00", "05.00-06.00", "06.00-07.00", "07.00-08.00", "08.00-09.00", "09.00-10.00", "10.00-11.00",
+				"11.00-12.00", "12.00-13.00", "13.00-14.00", "14.00-15.00", "15.00-16.00", "16.00-17.00", "17.00-18.00", "18.00-19.00", "19.00-20.00", "20.00-21.00", "21.00-22.00", "22.00-23.00",
+				"23.00-00.00" };
+		dateArray = new String[] { "torsdag", "fredag", "lördag" };
 		buttonListener = new Listener();
 		frame = new JFrame("Blomstermåla Rockfestival");
-		frame.setPreferredSize(new Dimension(375, 500));
+		frame.setPreferredSize(new Dimension(375, 250));
 		frame.add(initContent());
 		frame.setResizable(false);
 		frame.addWindowListener(this);
@@ -49,10 +61,9 @@ public class GUI implements WindowListener {
 
 	private JTabbedPane initContent() {
 		JTabbedPane tabs = new JTabbedPane();
-		JPanel bookScene = new JPanel();
 		tabs.addTab("Boka Band", initBookBand());
 		tabs.addTab("Delge Kontaktpersoner", initAssignContacts());
-		tabs.addTab("Boka Spelningar", bookScene);
+		tabs.addTab("Boka Spelningar", initBookPlay());
 		return tabs;
 	}
 
@@ -65,16 +76,6 @@ public class GUI implements WindowListener {
 		txtAreaBandStartYear = new JTextField();
 		btnBookBand = new JButton("Boka Band");
 		btnBookBand.addActionListener(buttonListener);
-		btnBookBand.setMinimumSize(new Dimension(370, 25));
-		btnBookBand.setMaximumSize(new Dimension(370, 25));
-		txtAreaBandName.setMinimumSize(new Dimension(370, 20));
-		txtAreaBandName.setMaximumSize(new Dimension(370, 20));
-		txtAreaBandStartYear.setMinimumSize(new Dimension(370, 20));
-		txtAreaBandStartYear.setMaximumSize(new Dimension(370, 20));
-		txtAreaBandOrigin.setMinimumSize(new Dimension(370, 20));
-		txtAreaBandOrigin.setMaximumSize(new Dimension(370, 20));
-		txtAreaBandGenre.setMinimumSize(new Dimension(370, 20));
-		txtAreaBandGenre.setMaximumSize(new Dimension(370, 20));
 		panelBands.add(new JLabel("Bandnamn"));
 		panelBands.add(txtAreaBandName);
 		panelBands.add(new JLabel("Startår"));
@@ -89,31 +90,50 @@ public class GUI implements WindowListener {
 
 	private JPanel initAssignContacts() {
 		JPanel panelContacts = new JPanel();
+		panelContacts.setLayout(new BoxLayout(panelContacts, BoxLayout.Y_AXIS));
 		btnSetContact = new JButton("Delge kontaktperson");
 		comboPerson = new JComboBox(controller.getPersons().toArray());
-		comboBand = new JComboBox(controller.getBands().toArray());
-		panelContacts.setLayout(new BoxLayout(panelContacts, BoxLayout.Y_AXIS));
+		comboBand = new JComboBox(controller.getBandsWithoutContacts().toArray());
 		btnSetContact.addActionListener(buttonListener);
-		btnSetContact.setMinimumSize(new Dimension(370, 20));
-		btnSetContact.setMaximumSize(new Dimension(370, 20));
-		comboPerson.setMinimumSize(new Dimension(370, 20));
-		comboPerson.setMaximumSize(new Dimension(370, 20));
-		comboBand.setMinimumSize(new Dimension(370, 20));
-		comboBand.setMaximumSize(new Dimension(370, 20));
 		panelContacts.add(new JLabel("Person"));
 		panelContacts.add(comboPerson);
 		panelContacts.add(new JLabel("Band"));
 		panelContacts.add(comboBand);
 		panelContacts.add(btnSetContact);
+		btnSetContact.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboPerson.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboBand.setAlignmentX(Component.LEFT_ALIGNMENT);
 		return panelContacts;
+	}
+
+	private JPanel initBookPlay() {
+		JPanel panelPlays = new JPanel();
+		panelPlays.setLayout(new BoxLayout(panelPlays, BoxLayout.Y_AXIS));
+		comboBandPlay = new JComboBox(controller.getBands().toArray());
+		comboScenePlay = new JComboBox(controller.getScenes().toArray());
+		comboDatePlay = new JComboBox(dateArray);
+		comboTimePlay = new JComboBox(timeArray);
+		btnBookPlay = new JButton("Boka spelning");
+		btnBookPlay.addActionListener(buttonListener);
+		panelPlays.add(new JLabel("Band"));
+		panelPlays.add(comboBandPlay);
+		panelPlays.add(new JLabel("Scen"));
+		panelPlays.add(comboScenePlay);
+		panelPlays.add(new JLabel("Dag"));
+		panelPlays.add(comboDatePlay);
+		panelPlays.add(new JLabel("Tid"));
+		panelPlays.add(comboTimePlay);
+		panelPlays.add(btnBookPlay);
+		comboBandPlay.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboScenePlay.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboDatePlay.setAlignmentX(Component.LEFT_ALIGNMENT);
+		comboTimePlay.setAlignmentX(Component.LEFT_ALIGNMENT);
+		btnBookPlay.setAlignmentX(Component.LEFT_ALIGNMENT);
+		return panelPlays;
 	}
 
 	public void showErrorMessage(String message) {
 		JOptionPane.showMessageDialog(frame, message);
-	}
-
-	public void showErrorMessage(String message, String exception) {
-		JOptionPane.showMessageDialog(frame, message + "\n\n" + exception);
 	}
 
 	private void bookBand() {
@@ -137,16 +157,22 @@ public class GUI implements WindowListener {
 		}
 	}
 
+	private void bookPlay() {
+		if (controller.timeSlotTaken(comboDatePlay.getSelectedItem().toString(), comboTimePlay.getSelectedItem().toString()))
+			showErrorMessage(Constants.TIME_SLOT_TAKEN);
+		else if (controller.bookPlay(comboScenePlay.getSelectedItem().toString(), comboBandPlay.getSelectedItem().toString(), comboDatePlay.getSelectedItem().toString(),
+				comboTimePlay.getSelectedItem().toString()))
+			JOptionPane.showMessageDialog(frame, Constants.PLAY_BOOKED);
+	}
+
 	private void setContact() {
 		String[] personSplitter = comboPerson.getSelectedItem().toString().split(" - ");
 		String person = personSplitter[0];
 		String band = comboBand.getSelectedItem().toString();
-		if (controller.bandHasContact(band))
-			showErrorMessage(Constants.BAND_HAS_CONTACT);
-		else if (controller.setContact(band, person)) {
+		if (controller.setContact(band, person)) {
 			JOptionPane.showMessageDialog(frame, Constants.CONTACT_SET);
 			comboPerson.setModel(new DefaultComboBoxModel(controller.getPersons().toArray()));
-			comboBand.setModel(new DefaultComboBoxModel(controller.getBands().toArray()));
+			comboBand.setModel(new DefaultComboBoxModel(controller.getBandsWithoutContacts().toArray()));
 		}
 	}
 
@@ -159,11 +185,12 @@ public class GUI implements WindowListener {
 
 	private class Listener implements ActionListener {
 		@Override public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == btnBookBand) {
+			if (event.getSource() == btnBookBand)
 				bookBand();
-			} else if (event.getSource() == btnSetContact) {
+			else if (event.getSource() == btnSetContact)
 				setContact();
-			}
+			else if (event.getSource() == btnBookPlay)
+				bookPlay();
 		}
 	}
 

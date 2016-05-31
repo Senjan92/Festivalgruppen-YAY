@@ -8,4 +8,7 @@ public class Constants {
 	public static final String COULD_NOT_CONNECT = "Kunde inte ansluta till databasen.";
 	public static final String CONTACT_SET = "Kontaktperson satt.";
 	public static final String BAND_HAS_CONTACT = "Bandet har redan en kontaktperson.";
+	public static final String TOO_MANY_FOR_CONTACT = "Kontaktpersonen har för många medlemmar att ha hand om.";
+	public static final String PLAY_BOOKED = "Spelning bokad.";
+	public static final String TIME_SLOT_TAKEN = "Dag och tid är redan bokad.";
 }
