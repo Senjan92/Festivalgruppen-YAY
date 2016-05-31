@@ -24,7 +24,7 @@ public class QueryHandler {
 
 	public ArrayList<String> getBandInfo(String band) throws SQLException {
 		statement = connection.prepareStatement(
-				"SELECT band.namn,band.ursprung,band.genre,bandmedlem.namn,bandmedlem.instrument FROM(band JOIN bandmedlem ON band.namn=bandmedlem.band)"
+				"SELECT, band.ursprung,band.genre,bandmedlem.namn,bandmedlem.instrument FROM(band JOIN bandmedlem ON band.namn=bandmedlem.band)"
 						+ "	WHERE band.namn='" + band + "';");
 		sqlResult = statement.executeQuery();
 		ArrayList<String> resultList = new ArrayList<>();

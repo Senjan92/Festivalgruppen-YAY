@@ -11,41 +11,27 @@ public class QueryHandler {
 	public QueryHandler(Connection connection) {
 		this.connection = connection;
 	}
-
-	public ArrayList<String> getBandPlayInfo() throws SQLException {
-		statement = connection.prepareStatement("SELECT scen, band, datum, tid FROM Festivalschema;");
-		sqlResult = statement.executeQuery();
+	
+	public ArrayList<String> getBandPlayInfo () throws SQLException {
+		statement = connection.prepareStatement ("SELECT scen, band, datum, tid FROM Festivalschema;");
+		sqlResult = statement.executeQuery();	
 		ArrayList<String> resultList = new ArrayList<>();
 		while (sqlResult.next())
-			resultList.add(sqlResult.getString(1) + " " + sqlResult.getString(2) + sqlResult.getString(3)
-					+ sqlResult.getString(4) + "\n");
-		return resultList;
-	}
-
-	public ArrayList<String> getBandInfo(String band) throws SQLException {
-		statement = connection.prepareStatement(
-				"SELECT band.namn,band.ursprung,band.genre,bandmedlem.namn,bandmedlem.instrument FROM(band JOIN bandmedlem ON band.namn=bandmedlem.band)"
-						+ "	WHERE band.namn='" + band + "';");
-		sqlResult = statement.executeQuery();
-		ArrayList<String> resultList = new ArrayList<>();
-		while (sqlResult.next())
-			resultList.add(sqlResult.getString(1) + " " + sqlResult.getString(2) + sqlResult.getString(3)
-					+ sqlResult.getString(4) + sqlResult.getString(5) + "\n");
+		resultList.add(sqlResult.getString(1)+" "+sqlResult.getString(2)+sqlResult.getString(3)+sqlResult.getString(4)+"\n");
 		return resultList;
 
-	}
+}
+	
 
 	public void addBand(String name, int year, String origin, String genre) throws SQLException {
-		statement = connection.prepareStatement(
-				"INSERT INTO Band VALUES ('" + name + "'," + year + ",'" + origin + "','" + genre + "');");
+		statement = connection.prepareStatement("INSERT INTO Band VALUES ('" + name + "'," + year + ",'" + origin + "','" + genre + "');");
 		statement.executeUpdate();
 	}
 
 	public void setContact(String band, String person) throws SQLException {
 		statement = connection.prepareStatement("INSERT INTO Kontaktperson VALUES ('" + person + "','" + band + "');");
 		statement.executeUpdate();
-		statement = connection.prepareStatement(
-				"UPDATE Personal SET Ansvarsomrade='Kontaktperson' WHERE Personnummer='" + person + "';");
+		statement = connection.prepareStatement("UPDATE Personal SET Ansvarsomrade='Kontaktperson' WHERE Personnummer='" + person + "';");
 		statement.executeUpdate();
 	}
 
