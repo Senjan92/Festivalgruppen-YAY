@@ -45,9 +45,18 @@ public class Controller {
 		}
 	}
 
-	public boolean timeSlotTaken(String date, String time) {
+	public boolean bandIsBooked(String band, String time) {
 		try {
-			return queryHandler.timeSlotTaken(date, time);
+			return queryHandler.bandIsBooked(band, time);
+		} catch (SQLException e) {
+			gui.showErrorMessage(Constants.DATABASE_ERROR);
+			return false;
+		}
+	}
+
+	public boolean timeSlotTaken(String scene, String date, String time) {
+		try {
+			return queryHandler.timeSlotTaken(scene, date, time);
 		} catch (SQLException e) {
 			gui.showErrorMessage(Constants.DATABASE_ERROR);
 		}

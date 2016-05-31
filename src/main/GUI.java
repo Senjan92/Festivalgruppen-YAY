@@ -158,7 +158,8 @@ public class GUI implements WindowListener {
 	}
 
 	private void bookPlay() {
-		if (controller.timeSlotTaken(comboDatePlay.getSelectedItem().toString(), comboTimePlay.getSelectedItem().toString()))
+		if (controller.timeSlotTaken(comboScenePlay.getSelectedItem().toString(), comboDatePlay.getSelectedItem().toString(), comboTimePlay.getSelectedItem().toString())
+				|| controller.bandIsBooked(comboBandPlay.getSelectedItem().toString(), comboTimePlay.getSelectedItem().toString()))
 			showErrorMessage(Constants.TIME_SLOT_TAKEN);
 		else if (controller.bookPlay(comboScenePlay.getSelectedItem().toString(), comboBandPlay.getSelectedItem().toString(), comboDatePlay.getSelectedItem().toString(),
 				comboTimePlay.getSelectedItem().toString()))

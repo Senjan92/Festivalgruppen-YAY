@@ -44,8 +44,17 @@ public class QueryHandler {
 		return bandList;
 	}
 
-	public boolean timeSlotTaken(String date, String time) throws SQLException {
-		statement = connection.prepareStatement("SELECT COUNT(schemaID) FROM festivalschema WHERE datum='" + date + "' AND tid='" + time + "';");
+	public boolean bandIsBooked(String band, String time) throws SQLException {
+		statement = connection.prepareStatement("SELECT COUNT(schemaID) FROM festivalschema WHERE band='" + band + "' AND tid='" + time + "'");
+		sqlResult = statement.executeQuery();
+		sqlResult.next();
+		if (sqlResult.getInt(1) > 0)
+			return true;
+		return false;
+	}
+
+	public boolean timeSlotTaken(String scene, String date, String time) throws SQLException {
+		statement = connection.prepareStatement("SELECT COUNT(schemaID) FROM festivalschema WHERE scen='" + scene + "' AND datum='" + date + "' AND tid='" + time + "';");
 		sqlResult = statement.executeQuery();
 		sqlResult.next();
 		if (sqlResult.getInt(1) > 0)
